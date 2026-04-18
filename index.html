@@ -1,0 +1,1219 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CompleteMyOnlineClass — Ace Your Classes Without Stress</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+/* ─── RESET & BASE ─── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; font-size: 16px; }
+
+:root {
+  --primary: #6C63FF;
+  --secondary: #00D4FF;
+  --accent: #FF6B9D;
+  --bg: #0B0B0F;
+  --bg2: #111118;
+  --bg3: #16161f;
+  --surface: rgba(255,255,255,0.04);
+  --surface2: rgba(255,255,255,0.08);
+  --border: rgba(255,255,255,0.08);
+  --border2: rgba(108,99,255,0.3);
+  --text: #F0F0FF;
+  --text2: rgba(240,240,255,0.6);
+  --text3: rgba(240,240,255,0.35);
+  --radius: 20px;
+  --radius-sm: 12px;
+  --gap: clamp(1rem, 3vw, 2rem);
+  --section: clamp(4rem, 10vw, 7rem);
+}
+
+[data-theme="light"] {
+  --bg: #F5F5FF;
+  --bg2: #EEEEFF;
+  --bg3: #E8E8FA;
+  --surface: rgba(108,99,255,0.05);
+  --surface2: rgba(108,99,255,0.1);
+  --border: rgba(108,99,255,0.15);
+  --border2: rgba(108,99,255,0.4);
+  --text: #0B0B1F;
+  --text2: rgba(11,11,31,0.6);
+  --text3: rgba(11,11,31,0.35);
+}
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  overflow-x: hidden;
+  line-height: 1.6;
+}
+
+/* ─── UTILS ─── */
+.container { max-width: 1200px; margin: 0 auto; padding: 0 clamp(1rem, 4vw, 2rem); }
+.section { padding: var(--section) 0; }
+
+h1, h2, h3, h4 { font-family: 'Syne', sans-serif; line-height: 1.1; }
+
+.tag {
+  display: inline-flex; align-items: center; gap: .4rem;
+  background: var(--surface2); border: 1px solid var(--border2);
+  color: var(--primary); font-size: .75rem; font-weight: 600;
+  letter-spacing: .08em; text-transform: uppercase;
+  padding: .35rem .85rem; border-radius: 100px;
+}
+
+.gradient-text {
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ─── GLASS ─── */
+.glass {
+  background: rgba(255,255,255,0.04);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+[data-theme="light"] .glass {
+  background: rgba(255,255,255,0.65);
+  border-color: rgba(108,99,255,0.15);
+}
+
+/* ─── BLOBS ─── */
+.blob-wrap { position: absolute; inset: 0; overflow: hidden; pointer-events: none; z-index: 0; }
+.blob {
+  position: absolute; border-radius: 50%;
+  filter: blur(80px); opacity: .35;
+  animation: blobFloat 8s ease-in-out infinite;
+}
+.blob--1 { width: 500px; height: 500px; background: var(--primary); top: -150px; left: -100px; animation-delay: 0s; }
+.blob--2 { width: 400px; height: 400px; background: var(--secondary); top: 100px; right: -80px; animation-delay: -3s; }
+.blob--3 { width: 300px; height: 300px; background: var(--accent); bottom: 50px; left: 40%; animation-delay: -5s; }
+
+@keyframes blobFloat {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(30px, -30px) scale(1.05); }
+  66% { transform: translate(-20px, 20px) scale(.97); }
+}
+
+/* ─── NAV ─── */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+  transition: all .4s;
+}
+nav.scrolled {
+  background: rgba(11,11,15,0.85);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+}
+[data-theme="light"] nav.scrolled { background: rgba(245,245,255,0.85); }
+
+.nav-inner {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 1.1rem 0;
+}
+
+.logo {
+  font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.25rem;
+  text-decoration: none; color: var(--text);
+  display: flex; align-items: center; gap: .5rem;
+}
+.logo-dot { width: 8px; height: 8px; border-radius: 50%; background: linear-gradient(135deg, var(--primary), var(--secondary)); }
+
+.nav-links { display: flex; align-items: center; gap: 2rem; list-style: none; }
+.nav-links a { text-decoration: none; color: var(--text2); font-size: .9rem; font-weight: 500; transition: color .2s; }
+.nav-links a:hover { color: var(--text); }
+
+.nav-actions { display: flex; align-items: center; gap: 1rem; }
+
+.btn {
+  display: inline-flex; align-items: center; gap: .5rem;
+  padding: .75rem 1.75rem; border-radius: 100px;
+  font-family: 'DM Sans', sans-serif; font-weight: 600; font-size: .9rem;
+  cursor: pointer; border: none; text-decoration: none; transition: all .25s;
+}
+.btn-ghost {
+  background: var(--surface); border: 1px solid var(--border);
+  color: var(--text);
+}
+.btn-ghost:hover { background: var(--surface2); border-color: var(--border2); }
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--primary), #8B5CF6);
+  color: #fff; box-shadow: 0 0 30px rgba(108,99,255,.3);
+}
+.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 0 50px rgba(108,99,255,.5); }
+.btn-primary:active { transform: translateY(0); }
+
+.btn-secondary {
+  background: linear-gradient(135deg, var(--secondary), #0099CC);
+  color: #000; font-weight: 700;
+}
+.btn-secondary:hover { transform: translateY(-2px); box-shadow: 0 0 40px rgba(0,212,255,.4); }
+
+.theme-toggle {
+  width: 40px; height: 40px; border-radius: 50%;
+  background: var(--surface); border: 1px solid var(--border);
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+  font-size: 1.1rem; transition: all .2s; color: var(--text);
+}
+.theme-toggle:hover { background: var(--surface2); }
+
+.hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 4px; }
+.hamburger span { width: 24px; height: 2px; background: var(--text); border-radius: 2px; transition: all .3s; }
+
+/* ─── HERO ─── */
+#hero {
+  min-height: 100vh; display: flex; align-items: center;
+  position: relative; padding: 7rem 0 5rem;
+}
+
+.hero-grid {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: clamp(2rem, 5vw, 4rem); align-items: center;
+  position: relative; z-index: 1;
+}
+
+.hero-eyebrow { margin-bottom: 1.5rem; }
+.hero-eyebrow .tag { animation: fadeSlideUp .6s ease both; }
+
+.hero-heading {
+  font-size: clamp(2.5rem, 5vw, 4rem); font-weight: 800;
+  margin-bottom: 1.25rem;
+  animation: fadeSlideUp .6s ease .1s both;
+}
+
+.hero-sub {
+  color: var(--text2); font-size: 1.05rem; max-width: 440px;
+  margin-bottom: 2rem; line-height: 1.7;
+  animation: fadeSlideUp .6s ease .2s both;
+}
+
+.hero-input-row {
+  display: flex; gap: .75rem; flex-wrap: wrap;
+  animation: fadeSlideUp .6s ease .3s both;
+}
+.hero-input {
+  flex: 1; min-width: 200px; padding: .875rem 1.25rem;
+  border-radius: 100px; border: 1px solid var(--border);
+  background: var(--surface2); color: var(--text); font-size: .95rem;
+  font-family: 'DM Sans', sans-serif; outline: none; transition: all .25s;
+}
+.hero-input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(108,99,255,.15); }
+.hero-input::placeholder { color: var(--text3); }
+
+.hero-note {
+  margin-top: 1rem; color: var(--text3); font-size: .8rem;
+  display: flex; align-items: center; gap: .5rem;
+  animation: fadeSlideUp .6s ease .4s both;
+}
+.hero-note::before { content: '✦'; color: var(--primary); font-size: .6rem; }
+
+.hero-badges {
+  display: flex; gap: .75rem; margin-top: 2rem; flex-wrap: wrap;
+  animation: fadeSlideUp .6s ease .5s both;
+}
+.badge {
+  display: flex; align-items: center; gap: .4rem;
+  background: var(--surface); border: 1px solid var(--border);
+  padding: .4rem .85rem; border-radius: 100px; font-size: .78rem; color: var(--text2);
+}
+.badge-dot { width: 6px; height: 6px; border-radius: 50%; }
+.badge-dot--green { background: #00E5A0; box-shadow: 0 0 6px #00E5A0; }
+.badge-dot--blue { background: var(--secondary); box-shadow: 0 0 6px var(--secondary); }
+
+/* ─── HERO FORM CARD ─── */
+.hero-card {
+  position: relative; padding: 2rem; border-radius: 24px;
+  animation: fadeSlideUp .6s ease .2s both;
+}
+.hero-card::before {
+  content: ''; position: absolute; inset: -1px;
+  border-radius: 25px;
+  background: linear-gradient(135deg, var(--primary), var(--secondary), var(--accent));
+  z-index: -1; opacity: .5;
+}
+.card-header { margin-bottom: 1.5rem; }
+.card-header h3 { font-size: 1.3rem; margin-bottom: .35rem; }
+.card-header p { font-size: .85rem; color: var(--text2); }
+
+.form-group { margin-bottom: 1rem; }
+.form-group label { display: block; font-size: .78rem; font-weight: 600; color: var(--text2); margin-bottom: .4rem; letter-spacing: .05em; text-transform: uppercase; }
+.form-control {
+  width: 100%; padding: .8rem 1rem; border-radius: var(--radius-sm);
+  background: rgba(255,255,255,0.06); border: 1px solid var(--border);
+  color: var(--text); font-size: .9rem; font-family: 'DM Sans', sans-serif;
+  outline: none; transition: all .25s;
+}
+.form-control:focus { border-color: var(--primary); background: rgba(108,99,255,.08); }
+.form-control::placeholder { color: var(--text3); }
+select.form-control option { background: #1a1a2e; }
+
+.card-footer-note { margin-top: 1rem; text-align: center; font-size: .75rem; color: var(--text3); }
+
+/* Floating decorative cards */
+.float-card {
+  position: absolute; padding: .7rem 1rem;
+  border-radius: 14px; display: flex; align-items: center; gap: .6rem;
+  font-size: .8rem; font-weight: 600; z-index: 2;
+  animation: floatCard 4s ease-in-out infinite;
+}
+.float-card--1 { top: -20px; right: -20px; background: linear-gradient(135deg, #00E5A0, #00C4B4); color: #003; animation-delay: 0s; }
+.float-card--2 { bottom: -15px; left: -20px; background: linear-gradient(135deg, var(--primary), #8B5CF6); color: #fff; animation-delay: -2s; }
+
+@keyframes floatCard {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+/* ─── STATS ─── */
+#stats { padding: 3rem 0; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+.stats-grid {
+  display: grid; grid-template-columns: repeat(4, 1fr);
+  gap: 1px; background: var(--border);
+  border: 1px solid var(--border); border-radius: var(--radius);
+  overflow: hidden;
+}
+.stat-item {
+  padding: 2rem 1.5rem; text-align: center; background: var(--bg);
+  transition: background .3s;
+}
+.stat-item:hover { background: var(--surface2); }
+.stat-num {
+  font-family: 'Syne', sans-serif; font-size: clamp(1.8rem, 3vw, 2.5rem);
+  font-weight: 800; display: block;
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.stat-label { font-size: .85rem; color: var(--text2); margin-top: .25rem; }
+
+/* ─── SERVICES ─── */
+.services-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.25rem; margin-top: 3rem;
+}
+
+.service-card {
+  padding: 1.75rem; border-radius: var(--radius);
+  background: var(--surface); border: 1px solid var(--border);
+  cursor: pointer; transition: all .3s; position: relative; overflow: hidden;
+}
+.service-card::before {
+  content: ''; position: absolute; inset: 0; opacity: 0; transition: opacity .3s;
+  background: linear-gradient(135deg, rgba(108,99,255,.1), rgba(0,212,255,.05));
+}
+.service-card:hover { transform: translateY(-6px); border-color: var(--border2); box-shadow: 0 20px 50px rgba(108,99,255,.15), 0 0 0 1px rgba(108,99,255,.2); }
+.service-card:hover::before { opacity: 1; }
+
+.service-icon {
+  width: 52px; height: 52px; border-radius: 14px;
+  background: linear-gradient(135deg, rgba(108,99,255,.2), rgba(0,212,255,.1));
+  border: 1px solid var(--border2); display: flex; align-items: center;
+  justify-content: center; font-size: 1.4rem; margin-bottom: 1.25rem;
+}
+.service-card h3 { font-size: 1.1rem; margin-bottom: .5rem; }
+.service-card p { font-size: .875rem; color: var(--text2); line-height: 1.6; }
+.service-arrow {
+  margin-top: 1.25rem; font-size: .8rem; color: var(--primary);
+  display: flex; align-items: center; gap: .3rem; font-weight: 600;
+  opacity: 0; transform: translateX(-5px); transition: all .3s;
+}
+.service-card:hover .service-arrow { opacity: 1; transform: translateX(0); }
+
+/* ─── SECTION HEADER ─── */
+.section-header { text-align: center; max-width: 600px; margin: 0 auto 1rem; }
+.section-header .tag { margin-bottom: 1rem; }
+.section-header h2 { font-size: clamp(1.8rem, 3.5vw, 2.75rem); margin-bottom: .75rem; }
+.section-header p { color: var(--text2); font-size: 1rem; }
+
+/* ─── PROCESS ─── */
+#process { background: var(--bg2); }
+.process-steps {
+  display: grid; grid-template-columns: 1fr auto 1fr auto 1fr;
+  align-items: start; gap: 0; margin-top: 3.5rem;
+}
+.process-connector {
+  display: flex; align-items: center; justify-content: center;
+  padding-top: 2.5rem;
+}
+.process-connector svg { width: 120px; height: 40px; }
+
+.process-step { text-align: center; padding: 0 1rem; }
+.step-circle {
+  width: 90px; height: 90px; border-radius: 50%; margin: 0 auto 1.25rem;
+  background: linear-gradient(135deg, rgba(108,99,255,.15), rgba(0,212,255,.1));
+  border: 2px solid var(--border2); display: flex; align-items: center;
+  justify-content: center; font-size: 1.8rem; position: relative; transition: all .4s;
+}
+.step-circle::before {
+  content: attr(data-num); position: absolute; top: -8px; right: -8px;
+  width: 22px; height: 22px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  color: #fff; font-size: .65rem; font-weight: 800; font-family: 'Syne', sans-serif;
+  display: flex; align-items: center; justify-content: center;
+}
+.process-step:hover .step-circle { transform: scale(1.08); border-color: var(--primary); box-shadow: 0 0 30px rgba(108,99,255,.3); }
+.process-step h3 { font-size: 1rem; margin-bottom: .5rem; }
+.process-step p { font-size: .84rem; color: var(--text2); }
+
+/* ─── TESTIMONIALS ─── */
+.testi-track-wrap { overflow: hidden; margin: 2rem -1rem 0; padding: 1rem; }
+.testi-track { display: flex; gap: 1.25rem; transition: transform .6s cubic-bezier(.25,.46,.45,.94); }
+.testi-card {
+  flex-shrink: 0; width: 320px; padding: 1.75rem; border-radius: var(--radius);
+  background: var(--surface); border: 1px solid var(--border); position: relative; overflow: hidden;
+}
+.testi-card::after {
+  content: '"'; position: absolute; right: 1.25rem; top: .5rem;
+  font-size: 5rem; font-family: 'Syne', sans-serif; color: var(--primary); opacity: .08;
+  line-height: 1;
+}
+.testi-avatar {
+  width: 48px; height: 48px; border-radius: 50%; object-fit: cover;
+  border: 2px solid var(--border2); font-size: 1.3rem; display: flex;
+  align-items: center; justify-content: center; background: var(--surface2);
+  margin-bottom: 1rem;
+}
+.testi-stars { color: #FFB800; font-size: .9rem; margin-bottom: .75rem; }
+.testi-text { font-size: .875rem; color: var(--text2); line-height: 1.65; margin-bottom: 1rem; }
+.testi-name { font-family: 'Syne', sans-serif; font-weight: 700; font-size: .9rem; }
+.testi-role { font-size: .78rem; color: var(--text3); }
+
+.testi-nav { display: flex; justify-content: center; gap: .75rem; margin-top: 2rem; }
+.testi-btn {
+  width: 44px; height: 44px; border-radius: 50%; border: 1px solid var(--border);
+  background: var(--surface); color: var(--text); cursor: pointer; font-size: 1rem;
+  transition: all .2s; display: flex; align-items: center; justify-content: center;
+}
+.testi-btn:hover { background: var(--primary); border-color: var(--primary); }
+.testi-dots { display: flex; gap: .4rem; align-items: center; }
+.testi-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--border); cursor: pointer; transition: all .3s; }
+.testi-dot.active { width: 20px; background: var(--primary); }
+
+/* ─── TRUST ─── */
+#trust { background: var(--bg2); text-align: center; }
+.trust-map-wrap {
+  position: relative; margin: 3rem auto; max-width: 800px;
+  border-radius: var(--radius); overflow: hidden; padding: 2rem;
+  background: var(--surface); border: 1px solid var(--border);
+}
+.world-svg { width: 100%; opacity: .35; }
+.trust-badges {
+  display: flex; justify-content: center; flex-wrap: wrap; gap: 1rem;
+  margin-top: 2rem;
+}
+.trust-badge {
+  display: flex; align-items: center; gap: .6rem;
+  padding: .7rem 1.25rem; border-radius: 100px;
+  background: var(--surface); border: 1px solid var(--border); font-size: .85rem;
+}
+.trust-badge-icon { font-size: 1.1rem; }
+
+/* ─── CTA ─── */
+#cta {
+  position: relative; overflow: hidden;
+  background: linear-gradient(135deg, #0B0B0F 0%, #1a0a3a 50%, #0a1a3a 100%);
+}
+[data-theme="light"] #cta { background: linear-gradient(135deg, #f0eeff 0%, #e0d4ff 50%, #d0e8ff 100%); }
+
+.cta-inner {
+  text-align: center; position: relative; z-index: 1;
+  padding: 6rem 0;
+}
+.cta-inner h2 { font-size: clamp(2rem, 4vw, 3.5rem); margin-bottom: 1rem; }
+.cta-inner p { color: var(--text2); max-width: 480px; margin: 0 auto 2.5rem; }
+.cta-btns { display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap; }
+
+.pulse {
+  animation: pulse 2.5s ease-in-out infinite;
+}
+@keyframes pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(108,99,255,.5), 0 0 30px rgba(108,99,255,.3); }
+  50% { box-shadow: 0 0 0 16px rgba(108,99,255,0), 0 0 60px rgba(108,99,255,.5); }
+}
+
+/* ─── FOOTER ─── */
+footer {
+  border-top: 1px solid var(--border); padding: 3rem 0 2rem;
+  background: var(--bg);
+}
+.footer-grid {
+  display: grid; grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 2rem; margin-bottom: 3rem;
+}
+.footer-brand p { color: var(--text2); font-size: .875rem; margin-top: .75rem; max-width: 260px; line-height: 1.7; }
+.footer-col h4 { font-size: .85rem; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: var(--text3); margin-bottom: 1rem; }
+.footer-col ul { list-style: none; }
+.footer-col ul li { margin-bottom: .6rem; }
+.footer-col ul a { text-decoration: none; color: var(--text2); font-size: .875rem; transition: color .2s; }
+.footer-col ul a:hover { color: var(--primary); }
+
+.footer-bottom {
+  display: flex; justify-content: space-between; align-items: center;
+  padding-top: 2rem; border-top: 1px solid var(--border); flex-wrap: wrap; gap: 1rem;
+}
+.footer-copy { font-size: .8rem; color: var(--text3); }
+
+.socials { display: flex; gap: .6rem; }
+.social-btn {
+  width: 36px; height: 36px; border-radius: 50%;
+  background: var(--surface); border: 1px solid var(--border);
+  color: var(--text2); text-decoration: none; display: flex;
+  align-items: center; justify-content: center; font-size: .85rem;
+  transition: all .2s;
+}
+.social-btn:hover { background: var(--primary); border-color: var(--primary); color: #fff; }
+
+/* ─── SCROLL ANIMATIONS ─── */
+.reveal {
+  opacity: 0; transform: translateY(30px);
+  transition: opacity .7s ease, transform .7s ease;
+}
+.reveal.visible { opacity: 1; transform: translateY(0); }
+.reveal-delay-1 { transition-delay: .1s; }
+.reveal-delay-2 { transition-delay: .2s; }
+.reveal-delay-3 { transition-delay: .3s; }
+.reveal-delay-4 { transition-delay: .4s; }
+
+@keyframes fadeSlideUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ─── MOBILE MENU ─── */
+.mobile-menu {
+  position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(11,11,15,.97); backdrop-filter: blur(20px);
+  z-index: 999; display: flex; flex-direction: column;
+  align-items: center; justify-content: center; gap: 2rem;
+  opacity: 0; pointer-events: none; transition: opacity .3s;
+}
+.mobile-menu.open { opacity: 1; pointer-events: all; }
+.mobile-menu a {
+  font-family: 'Syne', sans-serif; font-size: 1.75rem; font-weight: 700;
+  color: var(--text); text-decoration: none; transition: color .2s;
+}
+.mobile-menu a:hover { color: var(--primary); }
+.mobile-close { position: absolute; top: 1.5rem; right: 1.5rem; font-size: 1.5rem; cursor: pointer; color: var(--text2); }
+
+/* ─── RESPONSIVE ─── */
+@media (max-width: 900px) {
+  .hero-grid { grid-template-columns: 1fr; }
+  .hero-card { margin-top: 2rem; }
+  .float-card--1, .float-card--2 { display: none; }
+  .stats-grid { grid-template-columns: repeat(2, 1fr); }
+  .process-steps { grid-template-columns: 1fr; }
+  .process-connector { display: none; }
+  .footer-grid { grid-template-columns: 1fr 1fr; }
+  .nav-links { display: none; }
+  .hamburger { display: flex; }
+}
+@media (max-width: 600px) {
+  .stats-grid { grid-template-columns: 1fr 1fr; }
+  .footer-grid { grid-template-columns: 1fr; }
+  .footer-bottom { flex-direction: column; text-align: center; }
+  .hero-heading { font-size: 2.25rem; }
+  .hero-input-row { flex-direction: column; }
+  .hero-input { border-radius: var(--radius-sm); }
+  .btn { width: 100%; justify-content: center; }
+}
+
+/* ─── CUSTOM SCROLLBAR ─── */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 3px; }
+
+/* ─── SUBJECTS MARQUEE ─── */
+.marquee-wrap { overflow: hidden; margin-top: 2rem; }
+.marquee-track { display: flex; gap: 1rem; animation: marquee 25s linear infinite; width: max-content; }
+.marquee-track:hover { animation-play-state: paused; }
+@keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+.subject-chip {
+  padding: .5rem 1.25rem; border-radius: 100px; white-space: nowrap;
+  background: var(--surface); border: 1px solid var(--border);
+  font-size: .82rem; color: var(--text2); flex-shrink: 0; cursor: default;
+  transition: all .2s;
+}
+.subject-chip:hover { border-color: var(--border2); color: var(--text); }
+
+/* ─── COUNTER ─── */
+.counting { display: inline; }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="nav">
+  <div class="container">
+    <div class="nav-inner">
+      <a href="#" class="logo">
+        <div class="logo-dot"></div>
+        CompleteMyOnlineClass
+      </a>
+      <ul class="nav-links">
+        <li><a href="#services">Services</a></li>
+        <li><a href="#process">How It Works</a></li>
+        <li><a href="#testimonials">Reviews</a></li>
+        <li><a href="#subjects">Subjects</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+      <div class="nav-actions">
+        <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">🌙</button>
+        <a href="#hero" class="btn btn-primary" style="padding:.65rem 1.4rem;font-size:.85rem;">Get Help Now</a>
+        <div class="hamburger" id="hamburger">
+          <span></span><span></span><span></span>
+        </div>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- MOBILE MENU -->
+<div class="mobile-menu" id="mobileMenu">
+  <span class="mobile-close" id="mobileClose">✕</span>
+  <a href="#services" class="mobile-link">Services</a>
+  <a href="#process" class="mobile-link">How It Works</a>
+  <a href="#testimonials" class="mobile-link">Reviews</a>
+  <a href="#subjects" class="mobile-link">Subjects</a>
+  <a href="#contact" class="mobile-link">Contact</a>
+</div>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="blob-wrap">
+    <div class="blob blob--1"></div>
+    <div class="blob blob--2"></div>
+    <div class="blob blob--3"></div>
+  </div>
+  <div class="container">
+    <div class="hero-grid">
+      <!-- LEFT -->
+      <div class="hero-left">
+        <div class="hero-eyebrow">
+          <span class="tag">✦ #1 Academic Help Platform</span>
+        </div>
+        <h1 class="hero-heading">
+          Ace Your Classes<br>
+          <span class="gradient-text">Without the Stress</span>
+        </h1>
+        <p class="hero-sub">
+          Expert-guided assignment help, online exam assistance, and full class management — so you can focus on what matters.
+        </p>
+        <div class="hero-input-row">
+          <input type="email" class="hero-input" placeholder="Enter your email address" id="heroEmail">
+          <a href="#contact" class="btn btn-primary">Get Started →</a>
+        </div>
+        <p class="hero-note">Free consultation · No commitment · 99.5% success rate</p>
+        <div class="hero-badges">
+          <div class="badge"><div class="badge-dot badge-dot--green"></div>Experts Online Now</div>
+          <div class="badge"><div class="badge-dot badge-dot--blue"></div>24/7 Support</div>
+          <div class="badge">⭐ 4.9/5 Rated</div>
+        </div>
+      </div>
+
+      <!-- RIGHT — GLASS FORM CARD -->
+      <div style="position:relative;">
+        <div class="glass hero-card">
+          <div class="card-header">
+            <h3>📋 Submit Your Requirement</h3>
+            <p>Get matched with an expert in under 5 minutes</p>
+          </div>
+          <div class="form-group">
+            <label>Your Name</label>
+            <input type="text" class="form-control" placeholder="John Smith">
+          </div>
+          <div class="form-group">
+            <label>Email Address</label>
+            <input type="email" class="form-control" placeholder="john@university.edu">
+          </div>
+          <div class="form-group">
+            <label>Requirement Type</label>
+            <select class="form-control">
+              <option>Assignment Help</option>
+              <option>Online Exam Help</option>
+              <option>Full Class Help</option>
+              <option>Quiz/Test Help</option>
+              <option>Essay Writing</option>
+              <option>Discussion Posts</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Subject / Course</label>
+            <input type="text" class="form-control" placeholder="e.g., Accounting 101, Algebra...">
+          </div>
+          <button class="btn btn-secondary" style="width:100%;justify-content:center;" onclick="submitForm()">
+            Submit & Get Free Quote ✦
+          </button>
+          <p class="card-footer-note">🔒 100% Confidential · Secure & Private</p>
+        </div>
+        <div class="float-card float-card--1">✓ A+ Guaranteed</div>
+        <div class="float-card float-card--2">🎓 4600+ Students</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<section id="stats">
+  <div class="container">
+    <div class="stats-grid">
+      <div class="stat-item reveal">
+        <span class="stat-num"><span class="counting" data-target="4600">0</span>+</span>
+        <div class="stat-label">Happy Students</div>
+      </div>
+      <div class="stat-item reveal reveal-delay-1">
+        <span class="stat-num"><span class="counting" data-target="1800">0</span>+</span>
+        <div class="stat-label">Classes Completed</div>
+      </div>
+      <div class="stat-item reveal reveal-delay-2">
+        <span class="stat-num"><span class="counting" data-target="99" data-suffix=".5%">0</span></span>
+        <div class="stat-label">Success Rate</div>
+      </div>
+      <div class="stat-item reveal reveal-delay-3">
+        <span class="stat-num"><span class="counting" data-target="247">0</span>+</span>
+        <div class="stat-label">Expert Tutors</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section id="services" class="section">
+  <div class="container">
+    <div class="section-header reveal">
+      <span class="tag">Our Services</span>
+      <h2>Everything You Need to <span class="gradient-text">Succeed</span></h2>
+      <p>From single assignments to full semester class management — we've got you covered with top-tier academic experts.</p>
+    </div>
+    <div class="services-grid">
+      <div class="service-card reveal">
+        <div class="service-icon">📝</div>
+        <h3>Assignment Help</h3>
+        <p>Expertly written assignments, essays, and papers tailored to your course requirements and professor's expectations.</p>
+        <div class="service-arrow">Learn more →</div>
+      </div>
+      <div class="service-card reveal reveal-delay-1">
+        <div class="service-icon">🎯</div>
+        <h3>Online Exam Help</h3>
+        <p>Real-time assistance during your online exams. Our experts ensure you ace every test with confidence.</p>
+        <div class="service-arrow">Learn more →</div>
+      </div>
+      <div class="service-card reveal reveal-delay-2">
+        <div class="service-icon">🎓</div>
+        <h3>Full Class Management</h3>
+        <p>Hand over your entire online class. We handle attendance, discussions, assignments, and finals end-to-end.</p>
+        <div class="service-arrow">Learn more →</div>
+      </div>
+      <div class="service-card reveal reveal-delay-3">
+        <div class="service-icon">⚡</div>
+        <h3>Quiz & Test Help</h3>
+        <p>Quick, accurate answers for quizzes and tests. Get expert support for any format — timed or untimed.</p>
+        <div class="service-arrow">Learn more →</div>
+      </div>
+      <div class="service-card reveal">
+        <div class="service-icon">✍️</div>
+        <h3>Essay Writing</h3>
+        <p>Plagiarism-free, research-backed essays written to your rubric and delivered on time, every time.</p>
+        <div class="service-arrow">Learn more →</div>
+      </div>
+      <div class="service-card reveal reveal-delay-1">
+        <div class="service-icon">💬</div>
+        <h3>Discussion Posts</h3>
+        <p>Thoughtful, engaging discussion board responses that earn participation points and impress your instructor.</p>
+        <div class="service-arrow">Learn more →</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SUBJECTS MARQUEE -->
+<section id="subjects" style="padding:2rem 0 3rem;overflow:hidden;">
+  <div class="container">
+    <div class="section-header reveal" style="margin-bottom:1rem;">
+      <span class="tag">Subjects We Cover</span>
+    </div>
+  </div>
+  <div class="marquee-wrap">
+    <div class="marquee-track" id="marqueeTrack">
+      <!-- duplicated for infinite loop -->
+      <span class="subject-chip">📊 Accounting</span>
+      <span class="subject-chip">➕ Algebra</span>
+      <span class="subject-chip">🧬 Biology</span>
+      <span class="subject-chip">💬 Communication</span>
+      <span class="subject-chip">💻 Computer Science</span>
+      <span class="subject-chip">📈 Economics</span>
+      <span class="subject-chip">⚗️ Chemistry</span>
+      <span class="subject-chip">📜 History</span>
+      <span class="subject-chip">⚖️ Law</span>
+      <span class="subject-chip">🏥 Nursing</span>
+      <span class="subject-chip">🧠 Psychology</span>
+      <span class="subject-chip">📐 Statistics</span>
+      <span class="subject-chip">🔭 Physics</span>
+      <span class="subject-chip">📚 English Literature</span>
+      <span class="subject-chip">🏦 Finance</span>
+      <span class="subject-chip">🌍 Political Science</span>
+      <!-- Duplicate -->
+      <span class="subject-chip">📊 Accounting</span>
+      <span class="subject-chip">➕ Algebra</span>
+      <span class="subject-chip">🧬 Biology</span>
+      <span class="subject-chip">💬 Communication</span>
+      <span class="subject-chip">💻 Computer Science</span>
+      <span class="subject-chip">📈 Economics</span>
+      <span class="subject-chip">⚗️ Chemistry</span>
+      <span class="subject-chip">📜 History</span>
+      <span class="subject-chip">⚖️ Law</span>
+      <span class="subject-chip">🏥 Nursing</span>
+      <span class="subject-chip">🧠 Psychology</span>
+      <span class="subject-chip">📐 Statistics</span>
+      <span class="subject-chip">🔭 Physics</span>
+      <span class="subject-chip">📚 English Literature</span>
+      <span class="subject-chip">🏦 Finance</span>
+      <span class="subject-chip">🌍 Political Science</span>
+    </div>
+  </div>
+</section>
+
+<!-- PROCESS -->
+<section id="process" class="section">
+  <div class="container">
+    <div class="section-header reveal">
+      <span class="tag">How It Works</span>
+      <h2>Simple as <span class="gradient-text">1 – 2 – 3</span></h2>
+      <p>From submission to success in three effortless steps. We handle the complexity so you don't have to.</p>
+    </div>
+
+    <div class="process-steps">
+      <div class="process-step reveal">
+        <div class="step-circle" data-num="1">📋</div>
+        <h3>Submit Requirement</h3>
+        <p>Fill out the quick form with your course details, deadline, and any specific instructions from your professor.</p>
+      </div>
+      <div class="process-connector reveal reveal-delay-1">
+        <svg viewBox="0 0 120 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M10 20 Q60 5 110 20" stroke="url(#grad1)" stroke-width="2" stroke-dasharray="6 4" fill="none"/>
+          <defs>
+            <linearGradient id="grad1" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0%" stop-color="#6C63FF"/>
+              <stop offset="100%" stop-color="#00D4FF"/>
+            </linearGradient>
+          </defs>
+          <polygon points="108,15 118,20 108,25" fill="#00D4FF" opacity=".7"/>
+        </svg>
+      </div>
+      <div class="process-step reveal reveal-delay-2">
+        <div class="step-circle" data-num="2">🧑‍💼</div>
+        <h3>Expert Assigned</h3>
+        <p>We match you with a specialist in your subject who has a proven track record of A+ results in that exact course.</p>
+      </div>
+      <div class="process-connector reveal reveal-delay-3">
+        <svg viewBox="0 0 120 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M10 20 Q60 5 110 20" stroke="url(#grad2)" stroke-width="2" stroke-dasharray="6 4" fill="none"/>
+          <defs>
+            <linearGradient id="grad2" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0%" stop-color="#00D4FF"/>
+              <stop offset="100%" stop-color="#FF6B9D"/>
+            </linearGradient>
+          </defs>
+          <polygon points="108,15 118,20 108,25" fill="#FF6B9D" opacity=".7"/>
+        </svg>
+      </div>
+      <div class="process-step reveal reveal-delay-4">
+        <div class="step-circle" data-num="3">🏆</div>
+        <h3>Get Work Delivered</h3>
+        <p>Receive completed, top-quality work before your deadline. Review, request revisions — we ensure you're 100% satisfied.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section id="testimonials" class="section" style="background:var(--bg2);">
+  <div class="container">
+    <div class="section-header reveal" style="text-align:left;max-width:none;display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:1rem;">
+      <div>
+        <span class="tag" style="margin-bottom:.75rem;display:inline-flex;">Testimonials</span>
+        <h2>What students <span class="gradient-text">are saying</span></h2>
+        <p style="color:var(--text2);margin-top:.5rem;">Real stories from real students who changed their academic path.</p>
+      </div>
+      <div class="testi-nav" style="margin-top:0;">
+        <button class="testi-btn" id="testiPrev">←</button>
+        <div class="testi-dots" id="testiDots"></div>
+        <button class="testi-btn" id="testiNext">→</button>
+      </div>
+    </div>
+    <div class="testi-track-wrap reveal reveal-delay-1">
+      <div class="testi-track" id="testiTrack"></div>
+    </div>
+  </div>
+</section>
+
+<!-- TRUST -->
+<section id="trust" class="section">
+  <div class="container">
+    <div class="section-header reveal">
+      <span class="tag">Global Reach</span>
+      <h2>Trusted by Students <span class="gradient-text">Worldwide</span></h2>
+      <p>Students across the US, UK, Canada, Australia and 40+ countries trust us with their academic success.</p>
+    </div>
+
+    <div class="trust-map-wrap reveal reveal-delay-1">
+      <!-- Simplified world map SVG -->
+      <svg class="world-svg" viewBox="0 0 1000 500" xmlns="http://www.w3.org/2000/svg" fill="currentColor">
+        <g fill="var(--primary)" opacity="0.6">
+          <!-- North America -->
+          <ellipse cx="200" cy="180" rx="120" ry="90"/>
+          <!-- South America -->
+          <ellipse cx="260" cy="340" rx="70" ry="100"/>
+          <!-- Europe -->
+          <ellipse cx="480" cy="160" rx="60" ry="55"/>
+          <!-- Africa -->
+          <ellipse cx="490" cy="310" rx="75" ry="100"/>
+          <!-- Asia -->
+          <ellipse cx="700" cy="180" rx="150" ry="100"/>
+          <!-- Australia -->
+          <ellipse cx="800" cy="380" rx="70" ry="55"/>
+        </g>
+        <!-- Pulse dots for key locations -->
+        <circle cx="220" cy="170" r="6" fill="var(--secondary)" opacity="1">
+          <animate attributeName="r" values="6;12;6" dur="2s" repeatCount="indefinite"/>
+          <animate attributeName="opacity" values="1;0.3;1" dur="2s" repeatCount="indefinite"/>
+        </circle>
+        <circle cx="480" cy="155" r="6" fill="var(--accent)" opacity="1">
+          <animate attributeName="r" values="6;12;6" dur="2.5s" repeatCount="indefinite"/>
+          <animate attributeName="opacity" values="1;0.3;1" dur="2.5s" repeatCount="indefinite"/>
+        </circle>
+        <circle cx="700" cy="175" r="6" fill="var(--secondary)" opacity="1">
+          <animate attributeName="r" values="6;12;6" dur="3s" repeatCount="indefinite"/>
+          <animate attributeName="opacity" values="1;0.3;1" dur="3s" repeatCount="indefinite"/>
+        </circle>
+        <circle cx="800" cy="380" r="6" fill="var(--primary)" opacity="1">
+          <animate attributeName="r" values="6;12;6" dur="2.2s" repeatCount="indefinite"/>
+          <animate attributeName="opacity" values="1;0.3;1" dur="2.2s" repeatCount="indefinite"/>
+        </circle>
+      </svg>
+
+      <!-- Overlay stats -->
+      <div style="display:flex;justify-content:center;gap:2rem;flex-wrap:wrap;margin-top:1rem;">
+        <div style="text-align:center;">
+          <div class="stat-num" style="font-size:1.5rem;">40+</div>
+          <div style="font-size:.8rem;color:var(--text2);">Countries</div>
+        </div>
+        <div style="text-align:center;">
+          <div class="stat-num" style="font-size:1.5rem;">50+</div>
+          <div style="font-size:.8rem;color:var(--text2);">Universities</div>
+        </div>
+        <div style="text-align:center;">
+          <div class="stat-num" style="font-size:1.5rem;">4600+</div>
+          <div style="font-size:.8rem;color:var(--text2);">Students Helped</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="trust-badges reveal reveal-delay-2">
+      <div class="trust-badge"><span class="trust-badge-icon">🔒</span>100% Confidential</div>
+      <div class="trust-badge"><span class="trust-badge-icon">✅</span>Money-Back Guarantee</div>
+      <div class="trust-badge"><span class="trust-badge-icon">⚡</span>24/7 Available</div>
+      <div class="trust-badge"><span class="trust-badge-icon">🎓</span>PhD-Level Experts</div>
+      <div class="trust-badge"><span class="trust-badge-icon">🏆</span>A+ Guaranteed</div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section id="cta">
+  <div class="blob-wrap" style="opacity:.6;">
+    <div class="blob blob--1" style="opacity:.5;"></div>
+    <div class="blob blob--2" style="opacity:.4;top:50px;"></div>
+  </div>
+  <div class="container">
+    <div class="cta-inner">
+      <span class="tag" style="margin-bottom:1.5rem;">Start Today</span>
+      <h2>Ready to <span class="gradient-text">Boost Your Grades?</span></h2>
+      <p>Join 4,600+ students who stopped stressing and started acing their classes. Your first consultation is completely free.</p>
+      <div class="cta-btns">
+        <a href="#contact" class="btn btn-primary pulse" style="font-size:1rem;padding:.9rem 2rem;">
+          Start Now — It's Free ✦
+        </a>
+        <a href="#process" class="btn btn-ghost" style="font-size:1rem;padding:.9rem 2rem;">
+          See How It Works →
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact" class="section" style="background:var(--bg2);">
+  <div class="container">
+    <div class="section-header reveal">
+      <span class="tag">Contact Us</span>
+      <h2>Get Your Free <span class="gradient-text">Consultation</span></h2>
+    </div>
+    <div style="max-width:600px;margin:2.5rem auto 0;" class="reveal reveal-delay-1">
+      <div class="glass" style="padding:2.5rem;">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
+          <div class="form-group">
+            <label>First Name</label>
+            <input type="text" class="form-control" placeholder="John">
+          </div>
+          <div class="form-group">
+            <label>Last Name</label>
+            <input type="text" class="form-control" placeholder="Smith">
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Email Address</label>
+          <input type="email" class="form-control" placeholder="john@email.com">
+        </div>
+        <div class="form-group">
+          <label>Phone (Optional)</label>
+          <input type="tel" class="form-control" placeholder="+1 (555) 000-0000">
+        </div>
+        <div class="form-group">
+          <label>Service Needed</label>
+          <select class="form-control">
+            <option>Assignment Help</option>
+            <option>Online Exam Help</option>
+            <option>Full Class Help</option>
+            <option>Quiz/Test Help</option>
+            <option>Essay Writing</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Tell Us More</label>
+          <textarea class="form-control" rows="4" placeholder="Course name, deadline, specific instructions..." style="resize:vertical;"></textarea>
+        </div>
+        <button class="btn btn-primary" style="width:100%;justify-content:center;font-size:1rem;padding:.9rem;" onclick="submitContact()">
+          Submit & Get Free Quote ✦
+        </button>
+        <p class="card-footer-note" style="margin-top:1rem;">We respond within 15 minutes · 100% Confidential</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="#" class="logo" style="text-decoration:none;">
+          <div class="logo-dot"></div>
+          CompleteMyOnlineClass
+        </a>
+        <p>Your trusted academic partner. We help students achieve A+ grades with expert online class assistance, assignments, and exam help.</p>
+        <div class="socials" style="margin-top:1.25rem;">
+          <a href="#" class="social-btn">𝕏</a>
+          <a href="#" class="social-btn">f</a>
+          <a href="#" class="social-btn">in</a>
+          <a href="#" class="social-btn">📷</a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>Services</h4>
+        <ul>
+          <li><a href="#">Assignment Help</a></li>
+          <li><a href="#">Exam Help</a></li>
+          <li><a href="#">Class Help</a></li>
+          <li><a href="#">Quiz Help</a></li>
+          <li><a href="#">Essay Writing</a></li>
+          <li><a href="#">Discussion Posts</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Subjects</h4>
+        <ul>
+          <li><a href="#">Accounting</a></li>
+          <li><a href="#">Nursing</a></li>
+          <li><a href="#">Computer Science</a></li>
+          <li><a href="#">Statistics</a></li>
+          <li><a href="#">Psychology</a></li>
+          <li><a href="#">All Subjects →</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Company</h4>
+        <ul>
+          <li><a href="#">About Us</a></li>
+          <li><a href="#">How It Works</a></li>
+          <li><a href="#">Testimonials</a></li>
+          <li><a href="#">Blog</a></li>
+          <li><a href="#">Contact</a></li>
+          <li><a href="#">Privacy Policy</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span class="footer-copy">© 2025 CompleteMyOnlineClass. All rights reserved.</span>
+      <div style="display:flex;gap:1.5rem;flex-wrap:wrap;">
+        <a href="#" style="color:var(--text3);text-decoration:none;font-size:.8rem;">Privacy Policy</a>
+        <a href="#" style="color:var(--text3);text-decoration:none;font-size:.8rem;">Terms of Service</a>
+        <a href="#" style="color:var(--text3);text-decoration:none;font-size:.8rem;">Refund Policy</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+// ─── THEME TOGGLE ───
+const themeToggle = document.getElementById('themeToggle');
+let isDark = true;
+themeToggle.addEventListener('click', () => {
+  isDark = !isDark;
+  document.documentElement.setAttribute('data-theme', isDark ? 'dark' : 'light');
+  themeToggle.textContent = isDark ? '🌙' : '☀️';
+});
+
+// ─── NAV SCROLL ───
+const nav = document.getElementById('nav');
+window.addEventListener('scroll', () => {
+  nav.classList.toggle('scrolled', window.scrollY > 50);
+});
+
+// ─── MOBILE MENU ───
+const hamburger = document.getElementById('hamburger');
+const mobileMenu = document.getElementById('mobileMenu');
+const mobileClose = document.getElementById('mobileClose');
+
+hamburger.addEventListener('click', () => mobileMenu.classList.add('open'));
+mobileClose.addEventListener('click', () => mobileMenu.classList.remove('open'));
+document.querySelectorAll('.mobile-link').forEach(l => {
+  l.addEventListener('click', () => mobileMenu.classList.remove('open'));
+});
+
+// ─── SCROLL REVEAL ───
+const reveals = document.querySelectorAll('.reveal');
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); } });
+}, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+reveals.forEach(el => observer.observe(el));
+
+// ─── COUNTER ANIMATION ───
+function animateCounter(el) {
+  const target = parseInt(el.dataset.target);
+  const suffix = el.dataset.suffix || '';
+  const duration = 1500;
+  const step = target / (duration / 16);
+  let current = 0;
+  const timer = setInterval(() => {
+    current += step;
+    if (current >= target) { current = target; clearInterval(timer); }
+    el.textContent = Math.floor(current).toLocaleString() + suffix;
+  }, 16);
+}
+
+const counterObs = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.querySelectorAll('.counting').forEach(animateCounter);
+      counterObs.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.5 });
+document.querySelectorAll('#stats').forEach(el => counterObs.observe(el));
+
+// ─── TESTIMONIALS ───
+const testimonials = [
+  { name: 'Sarah M.', role: 'University of Florida', rating: 5, text: 'I was drowning in my online accounting class while working full-time. CompleteMyOnlineClass saved me. Got an A in the course!', emoji: '👩' },
+  { name: 'James T.', role: 'Liberty University Online', rating: 5, text: 'Skeptical at first, but after they handled my statistics midterm and I scored 94%, I was a total convert. 100% recommend.', emoji: '👨' },
+  { name: 'Priya K.', role: 'Arizona State University', rating: 5, text: 'They took over my entire nursing online course for 8 weeks. Every assignment submitted on time, final grade: A. Unbelievable service.', emoji: '👩‍⚕️' },
+  { name: 'Marcus R.', role: 'Western Governors University', rating: 5, text: 'The communication was fantastic. Real-time updates, responsive team, and they delivered exactly what they promised — an A grade.', emoji: '🧑‍💻' },
+  { name: 'Elena V.', role: 'Strayer University', rating: 5, text: 'Used them for three classes in a row. They know how to navigate Blackboard, Canvas, and every LMS. True experts.', emoji: '👩‍🎓' },
+  { name: 'David L.', role: 'University of Phoenix', rating: 5, text: 'Best investment I made in my academic career. They handled my discussion posts, quizzes, and finals. Finished with a 97% overall.', emoji: '👨‍💼' },
+];
+
+const track = document.getElementById('testiTrack');
+const dotsContainer = document.getElementById('testiDots');
+let currentIndex = 0;
+let autoSlide;
+
+function renderTestimonials() {
+  track.innerHTML = testimonials.map(t => `
+    <div class="testi-card">
+      <div class="testi-avatar">${t.emoji}</div>
+      <div class="testi-stars">${'★'.repeat(t.rating)}${'☆'.repeat(5 - t.rating)}</div>
+      <p class="testi-text">"${t.text}"</p>
+      <div class="testi-name">${t.name}</div>
+      <div class="testi-role">${t.role}</div>
+    </div>
+  `).join('');
+
+  dotsContainer.innerHTML = testimonials.map((_, i) => `
+    <div class="testi-dot ${i === 0 ? 'active' : ''}" data-i="${i}"></div>
+  `).join('');
+
+  document.querySelectorAll('.testi-dot').forEach(d => {
+    d.addEventListener('click', () => goTo(parseInt(d.dataset.i)));
+  });
+}
+
+function getCardsVisible() {
+  return window.innerWidth < 600 ? 1 : window.innerWidth < 900 ? 2 : 3;
+}
+
+function goTo(i) {
+  const max = testimonials.length - getCardsVisible();
+  currentIndex = Math.max(0, Math.min(i, max));
+  const cardW = 320 + 20;
+  track.style.transform = `translateX(-${currentIndex * cardW}px)`;
+  document.querySelectorAll('.testi-dot').forEach((d, idx) => {
+    d.classList.toggle('active', idx === currentIndex);
+  });
+}
+
+document.getElementById('testiPrev').addEventListener('click', () => { clearInterval(autoSlide); goTo(currentIndex - 1); startAuto(); });
+document.getElementById('testiNext').addEventListener('click', () => { clearInterval(autoSlide); goTo(currentIndex + 1); startAuto(); });
+
+function startAuto() {
+  autoSlide = setInterval(() => {
+    const next = currentIndex + 1 > testimonials.length - getCardsVisible() ? 0 : currentIndex + 1;
+    goTo(next);
+  }, 4000);
+}
+
+renderTestimonials();
+startAuto();
+
+// ─── FORM HELPERS ───
+function submitForm() {
+  const btn = event.currentTarget;
+  btn.textContent = '✓ Submitted! We\'ll contact you shortly';
+  btn.style.background = 'linear-gradient(135deg, #00E5A0, #00C4B4)';
+  btn.style.color = '#003';
+  setTimeout(() => {
+    btn.textContent = 'Submit & Get Free Quote ✦';
+    btn.style.background = '';
+    btn.style.color = '';
+  }, 3000);
+}
+
+function submitContact() {
+  const btn = event.currentTarget;
+  btn.textContent = '✓ Request Received!';
+  btn.style.background = 'linear-gradient(135deg, #00E5A0, #00C4B4)';
+  setTimeout(() => {
+    btn.textContent = 'Submit & Get Free Quote ✦';
+    btn.style.background = '';
+  }, 3000);
+}
+
+// ─── SMOOTH SCROLL ───
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', e => {
+    const target = document.querySelector(a.getAttribute('href'));
+    if (target) {
+      e.preventDefault();
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  });
+});
+</script>
+</body>
+</html>
